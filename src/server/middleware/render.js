@@ -1,6 +1,6 @@
 import React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { ServerRouter } from 'react-router'
+import {renderToStaticMarkup} from 'react-dom/server'
+import {ServerRouter} from 'react-router'
 import createServerRenderContext from 'react-router/createServerRenderContext'
 import preload from '../../client/preload'
 import Html from '../../components/common/Html'
@@ -8,31 +8,31 @@ import Html from '../../components/common/Html'
 // Server-side render
 export default async(ctx, next) => {
 
-    const renderContext = createServerRenderContext()
+  const renderContext = createServerRenderContext();
 
-    function renderComponent() {
-        return <ServerRouter location={ctx.url} context={renderContext}>
-            <Html stores={ctx.stores}/>
-        </ServerRouter>
-    }
+  function renderComponent() {
+    return <ServerRouter location={ctx.url} context={renderContext}>
+      <Html stores={ctx.stores}/>
+    </ServerRouter>
+  }
 
-    await preload(ctx.stores, ctx.url)
-    let markup = renderComponent()
-    const result = renderContext.getResult()
+  await preload({...ctx.stores, serverRendering: true}, ctx.url);
+  let markup = renderComponent();
+  const result = renderContext.getResult();
 
-    // Handle redirects
-    if (result.redirect) {
-        ctx.status = 301
-        ctx.redirect(result.redirect.pathname)
-        ctx.body = '<!DOCTYPE html>redirecting'
-        return await next()
-    }
+  // Handle redirects
+  if (result.redirect) {
+    ctx.status = 301;
+    ctx.redirect(result.redirect.pathname);
+    ctx.body = '<!DOCTYPE html>redirecting';
+    return await next()
+  }
 
-    // 404 Route not found !
-    if (result.missed) {
-        markup = renderComponent()
-        ctx.status = 404
-    }
+  // 404 Route not found !
+  if (result.missed) {
+    markup = renderComponent();
+    ctx.status = 404
+  }
 
-    ctx.body = '<!DOCTYPE html>\n' + renderToStaticMarkup(markup)
+  ctx.body = '<!DOCTYPE html>\n' + renderToStaticMarkup(markup)
 }

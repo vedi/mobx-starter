@@ -13,6 +13,8 @@ class Html extends React.Component {
                 <meta name="title" content={stores.common.title}/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
+                <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet"/>
+
                 {/* Favicons */}
                 <link rel="icon" href="/favicon.ico"/>
 

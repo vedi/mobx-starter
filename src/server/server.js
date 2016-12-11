@@ -13,32 +13,39 @@ import render from './middleware/render'
 import account from './routes/account'
 import todos from './routes/todos'
 
-const app = new Koa()
+const app = new Koa();
 
 // Middleware
-app.use(favicon(config.http.favicon))
+app.use(async(ctx, next) => {
+  global.navigator = {
+    userAgent: ctx.headers['user-agent']
+  };
+  await next()
+});
+
+app.use(favicon(config.http.favicon));
 app.use(convert(bodyParser({
-    formLimit: '200kb',
-    jsonLimit: '200kb',
-    bufferLimit: '4mb'
-})))
+  formLimit: '200kb',
+  jsonLimit: '200kb',
+  bufferLimit: '4mb'
+})));
 
 // Needed for authentication
-app.use(context)
+app.use(context);
 //app.use(catcher)
 
 // Routes
-app.use(todos.routes())
-app.use(account.routes())
+app.use(todos.routes());
+app.use(account.routes());
 
 // Serve static files
 config.http.static.forEach(staticRoute => {
-    logger('app:static')(staticRoute.path)
-    app.use(mount(staticRoute.url, serve(staticRoute.path)))
-})
+  logger('app:static')(staticRoute.path);
+  app.use(mount(staticRoute.url, serve(staticRoute.path)))
+});
 
-app.use(render)
+app.use(render);
 
-app.listen(config.http.port, function() {
-    logger('app:start')('Listening on port ' + config.http.port)
-})
+app.listen(config.http.port, function () {
+  logger('app:start')('Listening on port ' + config.http.port)
+});
