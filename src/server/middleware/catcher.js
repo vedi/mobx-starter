@@ -1,15 +1,15 @@
-import logger from 'debug'
-
 /**
  * Middleware for catching errors thrown in routes
- * @param fn {function}
+ * @param ctx
  * @returns {function}
  */
 export default (fn) => async(ctx, next) => {
   try {
     await next()
-  } catch (error) {
-    logger(`app:catcher`)(error)
-    return ctx.throw(400, error.toString())
+  } catch(error) {
+    console.error(error.message)
+    if (process.env.DEV) {
+      return ctx.throw(400, error.toString())
+    }
   }
 }

@@ -72,18 +72,18 @@ Stores will contain the state of your application and the methods that mutate th
 Basically most of your client side logic is inside stores.
 
 
-## What is `connect` ?
+## What is `@inject()` and `@observer` ?
 
-The `@connect` decorator injects stores into your components.
-Additionally, it keeps your components up to date with any changes in your stores.
+The `@inject` decorator injects stores into your components.
+Additionally by adding `@observer` your components will efficiently auto update with any changes to your stores.
 
 _Example: If you display a `messageCount` from a `Messages` store and it gets updated,
 then all the visible components that display that `messageCount` will update themselves._
 
 
-## Does connecting many components make my app slower?
+## Does observing many components make my app slower?
 
-**No**, it actually allows the rendering to be done more efficiently. So connect as many as you want !
+**No**, it actually allows the rendering to be done more efficiently. So observe as many as you want !
 
 
 ## Adding database (mongodb) models
@@ -104,7 +104,7 @@ then all the visible components that display that `messageCount` will update the
 
 ## My components are not updating!
 
-Make sure you added the `@connect` decorator to your component.
+Make sure you added the `@observer` decorator to your component.
 
 ## My stateless component doesn't have access to the stores !
 
@@ -112,9 +112,9 @@ You cannot use decorators on stateless components.
 You should instead wrap your component like this:
 
 ```js
-const MyComponent = connect((props, context) => {
-  return <p>{context.state.something} !</p>
-})
+const MyComponent = inject('myStore')(observer((props, context) => {
+  return <p>{props.myStore.something} !</p>
+}))
 ````
 
 ## How do I execute async actions on the server and/or client ?
