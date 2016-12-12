@@ -4,26 +4,16 @@ import {Link} from 'react-router'
 
 import {Drawer, MenuItem} from 'material-ui';
 
-const loggedInMenuItems = [
+const menuItems = [
   {route: '/', text: 'Browse'},
-  {route: '/page/about', text: 'About'},
-  {route: '/page/logout', text: 'Logout'},
-];
-
-const loggedOutMenuItems = [
-  {route: '/', text: 'Browse'},
-  {route: '/page/about', text: 'About'},
-  {route: '/page/register', text: 'Register'},
-  {route: '/page/login', text: 'Login'},
 ];
 
 
-@inject('account') @observer
+@observer
 class Menu extends React.Component {
 
   render() {
-    const {account} = this.props;
-    return this.getDrawer(account.isLoggedIn());
+    return this.getDrawer();
   }
 
   onDrawerChange(e, key, payload) {
@@ -31,14 +21,9 @@ class Menu extends React.Component {
     this.context.router.transitionTo(payload.route);
   }
 
-  getDrawer(loggedIn) {
-    const items = loggedIn ? loggedInMenuItems : loggedOutMenuItems;
-
-    return <Drawer
-      open={true}
-      onChange={this.onDrawerChange}
-    >
-      {items.map(loggedInMenuItem => this.getMenuItem(loggedInMenuItem))}
+  getDrawer() {
+    return <Drawer open={true} onChange={this.onDrawerChange}>
+      {menuItems.map(loggedInMenuItem => this.getMenuItem(loggedInMenuItem))}
     </Drawer>
   }
 

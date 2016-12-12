@@ -7,10 +7,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import {MuiThemeProvider, getMuiTheme} from 'material-ui/styles';
 
 import Home from './Home'
-import About from './About'
-import Login from '../components/account/Login'
-import Logout from '../components/account/Logout'
-import Register from '../components/account/Register'
 import NotFound from './NotFound'
 import Menu from '../components/common/Menu'
 import Title from '../components/common/Title'
@@ -38,12 +34,6 @@ class App extends React.Component {
           <Title/>
           <div style={styles.main}>
             <Match exactly pattern="/" component={Home}/>
-            <Match exactly pattern="/page/about" component={About}/>
-
-            {/* User management */}
-            <Match exactly pattern="/page/login" component={Login}/>
-            <Match exactly pattern="/page/logout" component={Logout}/>
-            <Match exactly pattern="/page/register" component={Register}/>
 
             <Miss component={NotFound}/>
           </div>

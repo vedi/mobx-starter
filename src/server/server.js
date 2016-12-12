@@ -10,13 +10,16 @@ import config from './config'
 import context from './middleware/context'
 import catcher from './middleware/catcher'
 import render from './middleware/render'
-import account from './routes/account'
-import todos from './routes/todos'
 
 const app = new Koa();
 
+global.btoa = (string) => {
+  return new Buffer(string).toString('base64');
+};
+
 // Middleware
 app.use(async(ctx, next) => {
+  // TODO: It's wrong code if you have several users... :)
   global.navigator = {
     userAgent: ctx.headers['user-agent']
   };
@@ -33,10 +36,6 @@ app.use(convert(bodyParser({
 // Needed for authentication
 app.use(context);
 // app.use(catcher);
-
-// Routes
-app.use(todos.routes());
-app.use(account.routes());
 
 // Serve static files
 config.http.static.forEach(staticRoute => {
