@@ -7,9 +7,9 @@ export default (fn) => async(ctx, next) => {
   try {
     await next()
   } catch(error) {
-    console.error(error.message)
+    console.error(error.message);
     if (process.env.DEV) {
-      return ctx.throw(400, error.toString())
+      return ctx.throw(400, error.toString());
     }
   }
 }
