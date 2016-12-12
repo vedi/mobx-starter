@@ -5,16 +5,16 @@ import {Link} from 'react-router'
 import {Drawer, MenuItem} from 'material-ui';
 
 const loggedInMenuItems = [
-  { route: '/', text: 'Browse' },
-  { route: '/page/about', text: 'About' },
-  { route: '/page/logout', text: 'Logout' },
+  {route: '/', text: 'Browse'},
+  {route: '/page/about', text: 'About'},
+  {route: '/page/logout', text: 'Logout'},
 ];
 
 const loggedOutMenuItems = [
-  { route: '/', text: 'Browse' },
-  { route: '/page/about', text: 'About' },
-  { route: '/page/register', text: 'Register' },
-  { route: '/page/login', text: 'Login' },
+  {route: '/', text: 'Browse'},
+  {route: '/page/about', text: 'About'},
+  {route: '/page/register', text: 'Register'},
+  {route: '/page/login', text: 'Login'},
 ];
 
 

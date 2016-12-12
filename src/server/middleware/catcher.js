@@ -6,10 +6,10 @@ import logger from 'debug'
  * @returns {function}
  */
 export default (fn) => async(ctx, next) => {
-    try {
-        await next()
-    } catch(error) {
-        logger(`app:catcher`)(error)
-        return ctx.throw(400, error.toString())
-    }
+  try {
+    await next()
+  } catch (error) {
+    logger(`app:catcher`)(error)
+    return ctx.throw(400, error.toString())
+  }
 }

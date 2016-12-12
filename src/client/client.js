@@ -5,9 +5,9 @@ import 'core/helpers/polyfills'
 import 'core/helpers/logger'
 import 'isomorphic-fetch'
 import React from 'react'
-import { render } from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
-import { BrowserRouter } from 'react-router'
+import {render} from 'react-dom'
+import {AppContainer} from 'react-hot-loader'
+import {BrowserRouter} from 'react-router'
 import stores from './stores'
 import autorun from './autorun'
 import App from '../pages/App'
@@ -22,12 +22,12 @@ const renderProps = (<App stores={stores}/>)
 
 // Render HTML on the browser
 render(<AppContainer>
-    <BrowserRouter>
-        {renderProps}
-    </BrowserRouter>
+  <BrowserRouter>
+    {renderProps}
+  </BrowserRouter>
 </AppContainer>, container)
 
 // Hot-reloading
 if (module.hot) {
-    module.hot.accept()
+  module.hot.accept()
 }

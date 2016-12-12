@@ -1,5 +1,7 @@
 import React from 'react'
 import {observer, inject} from 'mobx-react'
+import {TextField, RaisedButton} from 'material-ui'
+
 import Loading from '../common/Loading'
 import Error from '../common/Error'
 
@@ -63,27 +65,26 @@ class Login extends React.Component {
     }
 
     return <main>
-      <h1>sign-in</h1>
-      <form className="account" onSubmit={(e) => this.handleLogin(e)}>
-        <label>
-          Usernames
-          <input type="text"
-                 value={this.state.username}
-                 onChange={this.handleChange('username')}
-                 required="required"/>
-        </label>
-
-        <label>
-          Password
-          <input type="password"
-                 value={this.state.password}
-                 onChange={this.handleChange('password')}
-                 required="required"/>
-        </label>
+      <form onSubmit={(e) => this.handleLogin(e)}>
+        <TextField
+          name="username"
+          floatingLabelText="Username"
+          value={this.state.username}
+          onChange={this.handleChange('username')}
+          required="required"/>
+        <br/>
+        <TextField
+          name="password"
+          floatingLabelText="Password"
+          value={this.state.password}
+          onChange={this.handleChange('password')}
+          type="password"
+          required="required"/>
+        <br/>
 
         {error && <Error text={error}/>}
 
-        <button onClick={(e) => this.handleLogin(e)}>Login</button>
+        <RaisedButton label="Login" onClick={(e) => this.handleLogin(e)}/>
       </form>
     </main>
   }

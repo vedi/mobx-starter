@@ -5,9 +5,9 @@ import config from '../config'
 import Account from '../models/Account'
 
 export default router()
-.get('/api/account/logout', logout)
-.post('/api/account/login', login)
-.post('/api/account/register', register)
+  .get('/api/account/logout', logout)
+  .post('/api/account/login', login)
+  .post('/api/account/register', register)
 
 
 /**
@@ -16,54 +16,54 @@ export default router()
  * @returns {object}
  */
 export async function getAccount(token) {
-    if (token) {
-        const account = await Account.findOne({ token })
-        return account && account.toJSON()
-    }
+  if (token) {
+    const account = await Account.findOne({token});
+    return account && account.toJSON()
+  }
 }
 
 async function login(ctx) {
-    const { username, password } = ctx.request.fields
-    const account = await Account.findOne({
-        username,
-        password: sha512(password, { salt: username })
-    })
-    if (!account) throw new Error('Wrong credentials')
+  const {username, password} = ctx.request.fields;
+  const account = await Account.findOne({
+    username,
+    password: sha512(password, {salt: username})
+  });
+  if (!account) throw new Error('Wrong credentials');
 
-    account.token = createAuthToken(account._id)
-    await account.save()
+  account.token = createAuthToken(account._id);
+  await account.save();
 
-    ctx.cookies.set('token', account.token)
-    ctx.body = account.toJSON()
+  ctx.cookies.set('token', account.token);
+  ctx.body = account.toJSON()
 }
 
 async function logout(ctx) {
-    const user = await Account.findOneAndUpdate({ token: ctx.token }, { token: null })
-                              .lean() // clear in db
+  const user = await Account.findOneAndUpdate({token: ctx.token}, {token: null})
+    .lean(); // clear in db
 
-    ctx.cookies.set('token', null)
-    ctx.body = user
+  ctx.cookies.set('token', null);
+  ctx.body = user
 }
 
 async function register(ctx) {
-    const { username, password, email } = ctx.request.fields
+  const {username, password, email} = ctx.request.fields;
 
-    if (!isValidUsername(username)) {
-        throw new Error('Username cannot contain special characters')
-    }
-    const exists = await Account.count({ username })
-    if (exists) throw new Error('Username already taken')
+  if (!isValidUsername(username)) {
+    throw new Error('Username cannot contain special characters')
+  }
+  const exists = await Account.count({username});
+  if (exists) throw new Error('Username already taken');
 
-    const account = new Account({
-        username,
-        password: sha512(password, { salt: username }),
-        email
-    })
-    account.token = createAuthToken(account._id)
-    await account.save()
+  const account = new Account({
+    username,
+    password: sha512(password, {salt: username}),
+    email
+  });
+  account.token = createAuthToken(account._id);
+  await account.save();
 
-    ctx.cookies.set('token', account.token)
-    ctx.body = account
+  ctx.cookies.set('token', account.token);
+  ctx.body = account
 }
 
 /**
@@ -72,20 +72,20 @@ async function register(ctx) {
  * @returns {boolean}
  */
 export async function checkAuthorized(ctx) {
-    ctx.authorized = false
-    if (!ctx.token) throw new Error('Token not provided')
-    const account = await Account.findOne({ token: ctx.token }, 'token')
-    if (account) {
-        const decoded = jwt.decode(account.token, config.session.secret)
-        if (Date.now() < decoded.expires) {
-            ctx.authorized = true
-            return account
-        } else {
-            // Add renew or redirect functionality
-            throw new Error('Token expired: ' + new Date(decoded.expires))
-        }
+  ctx.authorized = false;
+  if (!ctx.token) throw new Error('Token not provided');
+  const account = await Account.findOne({token: ctx.token}, 'token');
+  if (account) {
+    const decoded = jwt.decode(account.token, config.session.secret);
+    if (Date.now() < decoded.expires) {
+      ctx.authorized = true;
+      return account
+    } else {
+      // Add renew or redirect functionality
+      throw new Error('Token expired: ' + new Date(decoded.expires))
     }
-    throw new Error('Invalid token')
+  }
+  throw new Error('Invalid token')
 }
 
 /**
@@ -95,11 +95,11 @@ export async function checkAuthorized(ctx) {
  * @returns {string|*}
  */
 function createAuthToken(accountID) {
-    const payload = {
-        accountID,
-        expires: Date.now() + config.session.expires
-    }
-    return jwt.encode(payload, config.session.secret)
+  const payload = {
+    accountID,
+    expires: Date.now() + config.session.expires
+  };
+  return jwt.encode(payload, config.session.secret)
 }
 
 /**
@@ -110,7 +110,7 @@ function createAuthToken(accountID) {
  * @returns {string}
  */
 function sha512(str, options) {
-    return crypto.createHmac('sha512', options.salt).update(str).digest('hex')
+  return crypto.createHmac('sha512', options.salt).update(str).digest('hex')
 }
 
 /**
@@ -119,5 +119,5 @@ function sha512(str, options) {
  * @returns {boolean}
  */
 function isValidUsername(username) {
-    return /^[a-z0-9_-]+$/i.test(username)
+  return /^[a-z0-9_-]+$/i.test(username)
 }
