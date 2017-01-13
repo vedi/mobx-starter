@@ -1,51 +1,51 @@
-import logger from 'debug'
-import Koa from 'koa'
-import bodyParser from 'koa-better-body'
-import favicon from 'koa-favicon'
-import mount from 'koa-mount'
-import serve from 'koa-static'
-import convert from 'koa-convert'
 
-import config from './config'
-import context from './middleware/context'
-import catcher from './middleware/catcher'
-import render from './middleware/render'
-import account from './routes/account'
-import todos from './routes/todos'
+
+import logger from 'debug';
+import Koa from 'koa';
+import koaLogger from 'koa-logger';
+import bodyParser from 'koa-better-body';
+import favicon from 'koa-favicon';
+import mount from 'koa-mount';
+import serve from 'koa-static';
+import convert from 'koa-convert';
+
+import config from './config';
+import context from './middleware/context';
+import render from './middleware/render';
 
 const app = new Koa();
 
+app.use(koaLogger());
+
+global.btoa = string => new Buffer(string).toString('base64');
+
 // Middleware
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
+  // TODO: It's wrong code if you have several users... :)
   global.navigator = {
-    userAgent: ctx.headers['user-agent']
+    userAgent: ctx.headers['user-agent'],
   };
-  await next()
+  await next();
 });
 
 app.use(favicon(config.http.favicon));
 app.use(convert(bodyParser({
   formLimit: '200kb',
   jsonLimit: '200kb',
-  bufferLimit: '4mb'
+  bufferLimit: '4mb',
 })));
+
+// Serve static files
+config.http.static.forEach((staticRoute) => {
+  logger('app:static')(staticRoute.path, staticRoute.url);
+  app.use(mount(staticRoute.url, serve(staticRoute.path)));
+});
 
 // Needed for authentication
 app.use(context);
-// app.use(catcher);
-
-// Routes
-app.use(todos.routes());
-app.use(account.routes());
-
-// Serve static files
-config.http.static.forEach(staticRoute => {
-  logger('app:static')(staticRoute.path);
-  app.use(mount(staticRoute.url, serve(staticRoute.path)))
-});
 
 app.use(render);
 
-app.listen(config.http.port, function () {
-  logger('app:start')('Listening on port ' + config.http.port)
+app.listen(config.http.port, () => {
+  logger('app:start')(`Listening on port ${config.http.port}`);
 });

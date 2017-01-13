@@ -146,7 +146,7 @@ It also passes all your stores and url params as arguments as a convenience.
     2. `catcher.js` catches and handles any errors that might occur in your routes.
     3. `authorize.js` checks if you are logged in and have access to protected routes.
     4. `render.js` finally renders your components.
-    
+
 3. `server.js` also imports the routes from `server/routes` where each route can use a database model defined in `server/models`.
 Just adding a model file there is enough, we initialize the models lazily when they are used.
 
@@ -158,7 +158,7 @@ Ex: `/profile/:username/overview`
 
 ## How it works (client)
 
-1. `client.js` initializes the stores, hot-reloading and other helpers. 
+1. `client.js` initializes the stores, hot-reloading and other helpers.
 2. It hydrates the state we got from the server and renders `pages/App.js`
 3. `pages/App.js` is basically your entry point. What you do afterwards is up to you!
 

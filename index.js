@@ -1,17 +1,18 @@
 /**
  * Bootstrap our server
  */
-require('isomorphic-fetch');
-require('./core/helpers/logger');
-require('./core/helpers/polyfills');
+require('app-module-path').addPath(__dirname);
+require('config/init')();
 
-// Compile files on PROD or launch DEV server
-if (process.env.NODE_ENV === 'production') {
-  require('./core/webpack/webpack.prod.js')
-} else {
+require('isomorphic-fetch');
+require('core/helpers/logger');
+require('core/helpers/polyfills');
+
+// Compile files on DEV server
+if (process.env.NODE_ENV !== 'production') {
   process.env.DEV = true;
-  require('./core/webpack/webpack.dev.js')
+  require('core/webpack/webpack.dev.js');
 }
 
 require('babel-register');
-require('./src/server/server');
+require('src/server/server');

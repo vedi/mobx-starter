@@ -1,12 +1,13 @@
+/* eslint-disable */
 const _ = require('lodash');
 
 // For IE 11
 if (typeof Promise === 'undefined') {
-  global.Promise = require('promise-polyfill')
+  global.Promise = require('promise-polyfill');
 }
 
 global.size = function (obj) {
-  return (typeof obj === 'string') ? obj.length : _.size(obj)
+  return (typeof obj === 'string') ? obj.length : _.size(obj);
 };
 
 /**
@@ -14,7 +15,7 @@ global.size = function (obj) {
  * @returns {string}
  */
 String.prototype.safeParam = function () {
-  return this.replace(/[\s\uFEFF\xA0]+/g, '+')
+  return this.replace(/[\s\uFEFF\xA0]+/g, '+');
 };
 
 /**
@@ -22,7 +23,7 @@ String.prototype.safeParam = function () {
  * @returns {string}
  */
 String.prototype.seoName = function () {
-  return this.toLowerCase().replace(/[\s\uFEFF\xA0]+/g, '_')
+  return this.toLowerCase().replace(/[\s\uFEFF\xA0]+/g, '_');
 };
 
 /**
@@ -33,7 +34,7 @@ String.prototype.cleanString = function () {
   return this.toLowerCase()
     .replace(/\W+|–/g, ' ')
     .replace(/\s+/g, ' ')
-    .trim()
+    .trim();
 };
 
 /**
@@ -41,7 +42,7 @@ String.prototype.cleanString = function () {
  * @returns {string}
  */
 String.prototype.escape = function () {
-  return _.escape(this)
+  return _.escape(this);
 };
 
 /**
@@ -49,14 +50,17 @@ String.prototype.escape = function () {
  * @returns {number}
  */
 String.prototype.hashCode = function () {
-  var hash = 0, i, chr, len;
+  let hash = 0,
+    i,
+    chr,
+    len;
   if (this.length === 0) return hash;
   for (i = 0, len = this.length; i < len; i++) {
     chr = this.charCodeAt(i);
     hash = ((hash << 5) - hash) + chr;
     hash |= 0; // Convert to 32bit integer
   }
-  return hash
+  return hash;
 };
 
 /**
@@ -64,9 +68,7 @@ String.prototype.hashCode = function () {
  * @returns {string}
  */
 String.prototype.base64encode = function () {
-  return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-    return String.fromCharCode('0x' + p1)
-  }))
+  return btoa(encodeURIComponent(this).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(`0x${p1}`)));
 };
 
 /**
@@ -81,7 +83,7 @@ if (!String.prototype.startsWith) {
 
 if (!Array.prototype.find) {
   Array.prototype.find = function (predicate) {
-    return _.find(this, predicate)
+    return _.find(this, predicate);
   };
 }
 
@@ -91,7 +93,7 @@ if (!Array.prototype.includes) {
   };
 }
 
-if (typeof Object.assign != 'function') {
+if (typeof Object.assign !== 'function') {
   Object.assign = _.extend;
 }
 
@@ -114,3 +116,4 @@ if (!String.prototype.trimRight) {
 function remove(str, rx) {
   return str.replace(rx, '');
 }
+/* eslint-enable */

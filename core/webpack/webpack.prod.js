@@ -1,58 +1,59 @@
-const path = require('path')
-const logger = require('debug')
-const webpack = require('webpack')
-const config = require('./webpack.base.js')
+const path = require('path');
+const _ = require('lodash');
+const logger = require('debug');
+const webpack = require('webpack');
+const config = require('./webpack.base.js');
 
 // Merge with base configuration
 //-------------------------------
-Object.assign(config, {
+_.merge(config, {
   cache: false,
-  devtool: 'source-map',
+  devtool: 'source-map', // eval eval-cheap-module-source-map source-map
   entry: {
-    bundle: path.join(__dirname, '../../src/client/client.js')
+    bundle: path.join(__dirname, '../../src/client/client.jsx'),
   },
   output: {
-    publicPath: '/build/'
-  }
-})
+    publicPath: '/build/',
+  },
+});
 
 // Production plugins for old browsers
 //------------------------------------
-config.module.loaders.forEach(loader => {
+config.module.loaders.forEach((loader) => {
   if (loader.loader === 'babel-loader') {
     loader.query.plugins.push(
-      "transform-es2015-arrow-functions",
-      "transform-es2015-block-scoped-functions",
-      "transform-es2015-block-scoping",
-      "transform-es2015-classes",
-      "transform-es2015-computed-properties",
-      "transform-es2015-literals",
-      "transform-es2015-parameters",
-      "transform-es2015-shorthand-properties",
-      "transform-es2015-spread",
-      "transform-es2015-template-literals"
-    )
+      'transform-es2015-arrow-functions',
+      'transform-es2015-block-scoped-functions',
+      'transform-es2015-block-scoping',
+      'transform-es2015-classes',
+      'transform-es2015-computed-properties',
+      'transform-es2015-literals',
+      'transform-es2015-parameters',
+      'transform-es2015-shorthand-properties',
+      'transform-es2015-spread',
+      'transform-es2015-template-literals'
+    );
   }
-})
+});
 
-logger('server:webpack')('Environment: Production')
+logger('server:webpack')('Environment: Production');
 
 // Save files to disk
 //-------------------------------
-config.output.path = path.join(__dirname, '../../build')
+config.output.path = path.join(__dirname, '../../build');
 config.plugins.push(
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.UglifyJsPlugin({
     compressor: {
       screw_ie8: true,
-      warnings: false
+      warnings: false,
     },
     output: {
-      comments: false
-    }
+      comments: false,
+    },
   })
-)
+);
 
 // Set some environment variables
 //-------------------------------
@@ -60,21 +61,21 @@ config.plugins.push(
   new webpack.DefinePlugin({
     'process.env.DEV': false,
     'process.env.BROWSER': true,
-    'process.env.NODE_ENV': JSON.stringify('production')
+    'process.env.NODE_ENV': JSON.stringify('production'),
   })
-)
+);
 
 // Sanity checks
 //-------------------------------
 if (config.devtool === 'eval') {
-  throw new Error('Using "eval" source-maps may break the build')
+  throw new Error('Using "eval" source-maps may break the build');
 }
 
 // Compile everything for PROD
 //-------------------------------
-const compiler = webpack(config)
-compiler.run(function (err, stats) {
-  if (err) throw err
+const compiler = webpack(config);
+compiler.run((err, stats) => {
+  if (err) throw err;
 
   // Output stats
   console.log(stats.toString({
@@ -83,27 +84,14 @@ compiler.run(function (err, stats) {
     chunks: false,
     version: false,
     children: false,
-    chunkModules: false
-  }))
+    chunkModules: false,
+  }));
 
   // Write a stats.json for the webpack bundle visualizer
-  //writeWebpackStats(stats)
+  // writeWebpackStats(stats)
 
   if (stats.hasErrors()) {
-    logger('webpack:error')(stats.compilation.errors.toString())
+    logger('webpack:error')(stats.compilation.errors.toString());
   }
-  logger('webpack:compiler')('Finished compiling')
-})
-
-
-/**
- * Writes a stats.json for the webpack bundle visualizer
- * URL: https://chrisbateman.github.io/webpack-visualizer/
- * @param stats
- */
-function writeWebpackStats(stats) {
-  const {resolve} = require('path')
-  const location = resolve(config.output.path, 'stats.json')
-  require('fs').writeFileSync(location, JSON.stringify(stats.toJson()))
-  logger('webpack:compiler')(`Wrote stats.json to ${location}`)
-}
+  logger('webpack:compiler')('Finished compiling');
+});

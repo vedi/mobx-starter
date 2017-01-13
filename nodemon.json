@@ -6,7 +6,6 @@
   },
   "ext": "js",
   "watch": [
-    "src/server",
-    "src/shared"
+    "src/server"
   ]
 }

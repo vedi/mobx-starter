@@ -1,11 +1,10 @@
-import {autorun} from 'mobx'
+import { autorun } from 'mobx';
 
-export default function ({common}) {
-
+export default function ({ ui }) {
   // Update document title whenever it changes
   autorun(() => {
-    if (common.title) {
-      document.title = common.title
+    if (ui.title) {
+      document.title = ui.title;
     }
-  })
+  });
 }
