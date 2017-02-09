@@ -2,8 +2,7 @@ import React from 'react';
 import { action } from 'mobx';
 import { inject } from 'mobx-react';
 import { Link } from 'react-router';
-import { IconButton, IconMenu, MenuItem } from 'material-ui';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import { MenuItem } from 'material-ui';
 
 @inject('ui')
 class BaseMenu extends React.Component {
@@ -28,27 +27,21 @@ class BaseMenu extends React.Component {
   @action
   handleRemoveConfirmed(submit) {
     if (submit) {
-      const { module: { name }, id } = this.props;
+      const { module: { name }, id, resource } = this.props;
       const store = this.props[name];
-      return store.remove(id);
+      return store.remove(id, resource);
     }
   }
 
   render() {
-    const { id, module: { metadata: { resource } } } = this.props;
-    return (
-      <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-      >
-        <Link to={`/${resource}/edit/${id}`}>{
-          ({ onClick }) =>
-            <MenuItem primaryText="Edit" onClick={onClick} />
-        }</Link>
-        <MenuItem primaryText="Remove" onClick={this.handleRemove} />
-      </IconMenu>
-    );
+    const { id, module: { metadata }, resource } = this.props;
+    return (<div>
+      <Link to={`/${resource || metadata.resource}/edit/${id}`}>{
+        ({ onClick }) =>
+          <MenuItem primaryText="Edit" onClick={onClick} />
+      }</Link>
+      <MenuItem primaryText="Remove" onClick={this.handleRemove} />
+    </div>);
   }
 
 }

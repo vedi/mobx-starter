@@ -1,1 +1,71 @@
 @import "home";
+
+@mixin placeholder($color) {
+  &::-webkit-input-placeholder {color: $color};
+  &:-moz-placeholder {color: $color};
+  &::-moz-placeholder {color: $color};
+  &:-ms-input-placeholder {color: $color};
+}
+
+.search-input {
+  input {
+    @include placeholder(rgba(255,255,255,.54));
+  }
+}
+.search {
+  position: fixed;
+  right: 66px;
+  width: 0;
+}
+.open {
+  width: 300px;
+  @media screen and (max-width: 800px) {
+    width: 200px;
+  }
+}
+.search-open {
+  height: 64px;
+  h1 {
+    @media screen and (max-width: 800px) {
+      display: none!important;
+   }
+  }
+}
+
+.sort-icon {
+  opacity: 0;
+  width: 16px;
+  height: 16px;
+  &:hover {
+    opacity: 0.35;
+  }
+}
+.asc, .desc {
+  opacity: 1!important;
+}
+.desc {
+  transform: rotate(180deg)!important;
+}
+.asc {
+  transform: rotate(0deg)!important;;
+}
+.search-label {
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.0);
+  outline: none;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+.sort-label {
+  &:hover .sort-icon {
+    opacity: 0.35;
+  }
+}
+.active {
+  color: rgba(0, 0, 0, 0.870588);
+} 

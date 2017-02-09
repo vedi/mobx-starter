@@ -97,7 +97,6 @@ export default (hostname, { basicAuthorization, login = '/login', accessToken })
     if (!headers.Authorization) {
       headers.Authorization = bearerToken ? `Bearer ${bearerToken}` : basicAuthorization;
     }
-
     return fetch(requestURL, requestOptions).then(handleResponse);
   };
 };

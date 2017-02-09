@@ -12,16 +12,25 @@ export default class Ui {
 
   constructor(state = {}) {
     extendObservable(this, {
-      title: 'Admin',
+      title: 'Plaqless-Admin',
       isConfirmationDialogOpen: false,
       confirmationDialogTitle: null,
       confirmationDialogMessage: null,
       isDrawerOpen: false,
+      showSearch: false,
+      searchValue: '',
+      searchOpen: false,
       lastResult: null,
       menuItems,
     }, state);
 
     this.confirmationHandler = null;
+  }
+
+  prepareSearch() {
+    this.showSearch = true;
+    this.searchValue = '';
+    this.searchOpen = false;
   }
 
   @action

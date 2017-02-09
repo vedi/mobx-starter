@@ -1,7 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-
 import { AppBar } from 'material-ui';
+
+import TitleMenu from './TitleMenu';
 
 @inject('ui')
 @observer
@@ -13,8 +14,7 @@ class Title extends React.Component {
   }
 
   getDropDown() {
-    // TODO: It's a template to define menus for AppBar
-    return /* <Match exactly pattern="/" component={ChargePointMenu}/>*/ null;
+    return <TitleMenu />;
   }
 
   handleToggleDrawer() {
@@ -25,9 +25,8 @@ class Title extends React.Component {
   render() {
     const { ui } = this.props;
     return (<AppBar
+      className={ui.searchOpen ? 'search-open' : ''}
       title={ui.title}
-      titleStyle={{ textAlign: 'center' }}
-      iconClassNameRight="muidocs-icon-navigation-expand-more"
       iconElementRight={this.getDropDown()}
       onLeftIconButtonTouchTap={this.handleToggleDrawer}
     />);

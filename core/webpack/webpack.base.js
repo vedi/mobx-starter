@@ -1,5 +1,5 @@
 const path = require('path');
-require('webpack');
+const webpack = require('webpack');
 const ExtractCSS = require('extract-text-webpack-plugin');
 
 const sources = location => path.join(__dirname, '../../src', location);
@@ -47,6 +47,10 @@ module.exports = {
         test: /\.(css|scss)(\?.+)?$/,
         loader: ExtractCSS.extract(['css-loader?sourceMap', 'sass-loader?sourceMap']),
         include: [sources('assets'), sources('client/components')],
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
       },
     ],
   },

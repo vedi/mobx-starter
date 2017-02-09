@@ -2,6 +2,6 @@
  * Created by vedi on 25/12/2016.
  */
 
-import validatorjs from 'validatorjs';
+import ajv from 'ajv';
 
-export default { dvr: validatorjs };
+export default { svk: ajv };

@@ -2,6 +2,7 @@ import Bb from 'bluebird';
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import MobxReactForm from 'mobx-react-form';
+import { Link } from 'react-router';
 
 import formPlugins from 'src/form-plugins';
 import FormTextField from 'src/components/form/FormTextField';
@@ -63,13 +64,16 @@ class LoginForm extends React.Component {
       <form>
         <FormTextField key="username" field={form.$('username')} />
         <FormTextField key="password" field={form.$('password')} type="password" />
-        <FormControls
-          form={form}
-          submitOptions={{
-            onSuccess: this.onSuccess,
-            onError: this.onError,
-          }}
-        />
+        <div>
+          <FormControls
+            form={form}
+            submitOptions={{
+              onSuccess: this.onSuccess,
+              onError: this.onError,
+            }}
+          />
+          <Link to="/users/create">Sign up</Link>
+        </div>
       </form>
     );
   }

@@ -8,6 +8,7 @@ class Dashboard extends React.Component {
   // When route is loaded (isomorphic)
   static onEnter({ ui }) {
     ui.title = 'Dashboard';
+    ui.showSearch = false;
   }
 
   componentWillMount() {
